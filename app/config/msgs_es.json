@@ -1,0 +1,8 @@
+{
+	"test_msj_sin_params" : "msj sin param",
+	"test_msj1_params" : "Msj con 1 param {} de ejemplo",
+	"test_msj2_params" : "Msj con 2 param {} de ejemplo {}",
+	"ERROR_ATTR_NONE" : "El atributo {} no puede ser None.",
+	"ERROR_ATTR_TYPE" : "El atributo {} debe ser de tipo {}. Pero es {}",
+	"ERROR_ATTR_REQUERIDO" : "Falta el atributo requerido {}." 
+}

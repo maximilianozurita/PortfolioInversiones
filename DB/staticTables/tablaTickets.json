@@ -1,0 +1,37 @@
+{
+	"querys" : {
+		"delete" : "DELETE FROM tickets",
+		"insert" : "INSERT INTO tickets (ticket, name, ratio, date) VALUES (%s, %s, %s, UNIX_TIMESTAMP()) ON DUPLICATE KEY UPDATE ticket=VALUES(ticket), name=VALUES(name), ratio=VALUES(ratio), date=VALUES(date)"
+	},
+	"observaciones" : {
+		"table" : "tickets",
+		"columnaInsert" : "[ticket, name, ratio, date]",
+		"tipoDeDatosInsert" : "[varchar(50), varchar(50), int, bigint]",
+		"comentarios" : ""
+	},
+	"data" : {
+		"insert" : [
+			["AAPL", "Apple", 10],
+			["AMD", "Amd", 10],
+			["BRKB", "Berkshire Hathaway", 22],
+			["DISN", "Disney", 12],
+			["GOOGL", "Google", 58],
+			["INTC", "Intel", 5],
+			["JPM", "Jpmorgan Chase & Co.", 5],
+			["KO", "Coca cola", 5],
+			["MA", "Mastercard", 33],
+			["MCD", "Mac Donalds", 24],
+			["MELI", "Mercado libre", 60],
+			["META", "Meta", 24],
+			["MSFT", "Microsoft", 30],
+			["NVDA", "Nvidia", 24],
+			["PBR", "Petrobras", 1],
+			["PEP", "Pepsico", 6],
+			["V", "Visa", 18],
+			["VIST", "Vista", 1],
+			["WMT", "Wallmart", 6],
+			["PAMP", "Pampa", 1],
+			["YPF", "Ypf", 1]
+		]
+	}
+}
