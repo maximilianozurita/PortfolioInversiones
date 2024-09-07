@@ -2,21 +2,18 @@ from src.models.conector import conectorBase
 
 class Ticket:
 	_tabla = "tickets"
-	def __init__(self, ticket, loadAll = 0):
-		self.ticket = ticket
-		if loadAll:
-			self.name = loadAll["name"]
-			self.ratio = loadAll["ratio"]
-			self.date = loadAll["date"]
-		else:
-			self._cargar_datos()
-
-	def _cargar_datos(self):
-		conector = conectorBase()
-		query = "SELECT * from " + self._tabla + " WHERE ticket = %s"
-		result = conector.selectOne(query, [self.ticket])
-		for attr in result:
-			setattr(self, attr, result[attr])
+	def __new__(cls, ticket, data = None):
+		if ticket is not None:
+			if not data:
+				data = Ticket.loadData(ticket)
+			if data:
+				instance = super(Ticket, cls).__new__(cls)
+				instance.ticket = data["ticket"]
+				instance.name = data["name"]
+				instance.ratio = data["ratio"]
+				instance.date = data["date"]
+				return instance
+		return None
 
 	def __repr__(self):
 			attrs = ', '.join(f'{attr}={getattr(self, attr)}' for attr in vars(self))
@@ -35,4 +32,11 @@ class Ticket:
 		conector = conectorBase()
 		query = "SELECT * from " + Ticket._tabla + " limit 1"
 		attrsExpected = conector.selectOne(query)
-		return Ticket(attrsExpected["ticket"])
+		if attrsExpected:
+			return Ticket(attrsExpected["ticket"])
+		return None
+
+	def loadData(ticket):
+		conector = conectorBase()
+		query = "SELECT * from " + Ticket._tabla + " WHERE ticket = %s"
+		return conector.selectOne(query, [ticket])

@@ -5,10 +5,11 @@ import unittest
 class testBase(unittest.TestCase):
 	def setUp(self):
 		self.factory = FactoryRegister()
+		print("=======================================")
 		print(f"Running test: {self.id().split('.')[-1]}")
 
 	def tearDown(self):
-		print(f"Ending test: {self.id().split('.')[-1]}")
+		print(f"Ending test: {self.id().split('.')[-1]} \n")
 		objtsToDelete = self.factory.createdObjects
 		for obj in objtsToDelete:
 			obj.delete()

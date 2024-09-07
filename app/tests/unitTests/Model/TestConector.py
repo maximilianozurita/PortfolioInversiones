@@ -32,7 +32,7 @@ class testConector(testBase):
 
 	# def testExecuteQuery():
 	# def testCargarAttrColumnas():
-#FALTA MEJORAR TESTS MEJORANDO EXPECTED
+	#Mejorar expected de tests
 
 if __name__ == '__main__':
 	unittest.main()

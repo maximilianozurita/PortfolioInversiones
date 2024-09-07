@@ -9,12 +9,23 @@ class testTicket(testBase):
 		obj = Ticket(attrsExpected["ticket"])
 		self.assertIsInstance(obj, Ticket)
 		for key, value in attrsExpected.items():
-			self.assertTrue(hasattr(obj, key)) #Tiene el attributo
-			self.assertEqual(getattr(obj, key), value) #Tiene el mismo valor
+			self.assertTrue(hasattr(obj, key))
+			self.assertEqual(getattr(obj, key), value)
+
+
+	def testFindAll(self):
+		tickets = Ticket.findAll()
+		self.assertGreater(len(tickets), 0)
+		for ticket in tickets:
+			self.assertIsInstance(ticket, Ticket)
 
 	def testFindOne(self):
 		ticketObj = Ticket.findOne()
 		self.assertIsInstance(ticketObj, Ticket)
+
+	def testNoInstanciarTicketIncorrecto(self):
+		TicketObj = Ticket("TicketIncorrecto")
+		self.assertIsNone(TicketObj)
 
 if __name__ == '__main__':
 	unittest.main()
