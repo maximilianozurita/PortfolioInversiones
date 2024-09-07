@@ -27,23 +27,20 @@ class MainClass:
 #--------------------------------------------------------METODOS ESTATICOS--------------------------------------------------------------#
 
 	@classmethod
-	def preAddVerification(cls, data):
-		return MainClass.addVerification(data, cls._attrs, 0)
+	def preAddVerification(cls, data, errors = {}):
+		return MainClass.addVerification(data, cls._attrs, 0, errors)
 
 	@classmethod
-	def postAddVerification(cls, data):
-		return MainClass.addVerification(data, cls._attrs, 1)
-
+	def postAddVerification(cls, data, errors = {}):
+		return MainClass.addVerification(data, cls._attrs, 1, errors)
 
 	@staticmethod
-	def addVerification(data, classAttrs, postAdd):
+	def addVerification(data, classAttrs, postAdd, errors):
 		attrs = {}
-		errors = {}
 		if postAdd:
 			attrs = {key: value for key, value in classAttrs.items() if 'postAdd' in value}
 		else:
 			attrs = {key: value for key, value in classAttrs.items() if 'postAdd' not in value}
-
 		for key, value in attrs.items():
 			attrType = value["type"]
 			canBeNull = "null" in value

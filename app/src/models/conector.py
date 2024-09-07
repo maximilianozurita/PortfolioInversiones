@@ -24,9 +24,11 @@ class conectorBase:
 	def select(self, query, values = None, selectOne = 0):
 		self.cursor.execute(query, values)
 		results = self.cursor.fetchone() if selectOne else self.cursor.fetchall()
-		self.loadColumnAttr()
-		datos_dict = dict(zip(self.columnasName, results)) if selectOne else [dict(zip(self.columnasName, fila)) for fila in results]
-		self.close()
+		datos_dict = None if selectOne else []
+		if results:
+			self.loadColumnAttr()
+			datos_dict = dict(zip(self.columnasName, results)) if selectOne else [dict(zip(self.columnasName, fila)) for fila in results]
+			self.close()
 		return datos_dict
 
 	def loadColumnAttr(self):

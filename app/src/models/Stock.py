@@ -23,13 +23,11 @@ class Stock(MainClass):
 			"type": int,
 		},
 		"name": {
-			"type": str,
-			"postAdd": True
+			"type": str
 		},
 		"ratio": {
 			"type": int,
-			"null" : True,
-			"postAdd": True
+			"null" : True
 		},
 	}
 
@@ -53,28 +51,37 @@ class Stock(MainClass):
 		conector = conectorBase()
 		query = "SELECT s.*, t.ratio as ratio, t.name as name from " + Stock._table + " s JOIN tickets t ON (s.ticket = t.ticket) where s.ticket = %s"
 		fila = conector.selectOne(query, [ticket])
-		return Stock(fila)
+		if fila:
+			return Stock(fila)
+		return None
 
+	@staticmethod
+	def ticketVerification(ticket):
+		conector = conectorBase()
+		query = "SELECT ratio, name FROM tickets WHERE ticket = %s"
+		ticketData = conector.selectOne(query, [ticket])
+		if ticketData:
+			return {}, ticketData
+		else:
+			return {"ERROR_ATTR_INCORRECTO" : [[ticket]]}, {"ratio" : None, "name" : None}
 
 	@staticmethod
 	def add(data):
-		errors = Stock.preAddVerification(data)
+		errors, ticketData = Stock.ticketVerification(data["ticket"])
+		attrsData = {**data, **ticketData}
+		errors = Stock.preAddVerification(attrsData, errors)
 		if len(errors) == 0:
 			conector = conectorBase()
 			values = [
-				data["ticket"],
-				data["ppc"],
-				data["quantity"],
-				data.get("weighted_date") or datetime.datetime.now().timestamp()
+				attrsData["ticket"],
+				attrsData["ppc"],
+				attrsData["quantity"],
+				attrsData.get("weighted_date") or datetime.datetime.now().timestamp()
 			]
 			query = "INSERT INTO " + Stock._table + " (ticket, ppc, quantity, weighted_date) VALUES (%s, %s, %s, %s)"
-			data["id"] = conector.executeQuery(query, values)
+			attrsData["id"] = conector.executeQuery(query, values)
 
-			conector = conectorBase()
-			query = "SELECT ratio, name FROM tickets WHERE ticket = %s"
-			ticketsData = conector.selectOne(query, [data["ticket"]])
-			attrsData = {**data, **ticketsData}
 			return Stock(attrsData)
 		else:
 			msgsHandler.printErrors(errors)
-			raise AttributeError("No se pudo agregar objeto")
+			return None

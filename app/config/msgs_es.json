@@ -4,5 +4,6 @@
 	"test_msj2_params" : "Msj con 2 param {} de ejemplo {}",
 	"ERROR_ATTR_NONE" : "El atributo {} no puede ser None.",
 	"ERROR_ATTR_TYPE" : "El atributo {} debe ser de tipo {}. Pero es {}",
-	"ERROR_ATTR_REQUERIDO" : "Falta el atributo requerido {}." 
+	"ERROR_ATTR_REQUERIDO" : "Falta el atributo requerido {}.",
+	"ERROR_ATTR_INCORRECTO" : "El atributo {} es incorrecto."
 }

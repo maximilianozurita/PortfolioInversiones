@@ -68,7 +68,22 @@ class testStock(testBase):
 		errors = Stock.postAddVerification(data)
 		self.assertFalse(bool(errors))
 
-	# def testDelete(self):
+	def testDelete(self):
+		ticket = Ticket.findOne().ticket
+		stock = self.factory.getNew("Stock", {"ticket": ticket})
+		stock.delete()
+		obj = Stock.findByTicket(ticket)
+		self.assertIsNone(obj)
+
+	def testAddWithTicketIncorrect(self):
+		data = {
+			"ticket" : "IncorrectTicketName",
+			"ppc" : round(random.uniform(1.0,20.0), 4),
+			"quantity" : random.randint(1,10),
+			"weighted_date" : random.randint(1,1000)
+		}
+		stock = Stock.add(data)
+		self.assertIsNone(stock)
 
 if __name__ == '__main__':
 	unittest.main()
