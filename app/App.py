@@ -1,5 +1,5 @@
 from flask import Flask
-from src.rutes.equityRutes import equity
+from app.src.rutes.equity_rutes import equity
 
 app = Flask(__name__)
 app.register_blueprint(equity)

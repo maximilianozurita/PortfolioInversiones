@@ -1,9 +1,9 @@
 class FactoryBase:
 	def __init__(self, data):
-		self.attrs = self.attrParser(data)
+		self.attrs = self.attr_parser(data)
 
-	def attrParser(self, data):
+	def attr_parser(self, data):
 		return data
 
-	def initObj(self):
+	def init_obj(self):
 		return self.pkg.add(self.attrs)

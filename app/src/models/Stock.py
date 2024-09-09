@@ -1,6 +1,7 @@
-from src.models.conector import conectorBase
-from src.helpers.msgsHandler import msgsHandler
-from src.models.MainClass import MainClass
+from src.models.conector import ConectorBase
+from src.helpers.msgs_handler import msgsHandler
+from src.models.main_class import MainClass
+from src.models.ticket import Ticket
 import datetime
 
 class Stock(MainClass):
@@ -8,9 +9,9 @@ class Stock(MainClass):
 	_attrs = {
 		"id": {
 			"type": int,
-			"postAdd": True,
+			"post_add": True,
 		},
-		"ticket": {
+		"ticket_code": {
 			"type": str,
 		},
 		"ppc": {
@@ -36,10 +37,10 @@ class Stock(MainClass):
 
 #--------------------------------------------------------METODOS ESTATICOS--------------------------------------------------------------#
 	@staticmethod
-	def findAll():
-		conector = conectorBase()
+	def find_all():
+		conector = ConectorBase()
 		stock = []
-		query = "SELECT s.*, t.ratio as ratio, t.name as name from " + Stock._table + " s JOIN tickets t ON (s.ticket = t.ticket) ORDER BY s.ticket"
+		query = "SELECT s.*, t.ratio as ratio, t.name as name from " + Stock._table + " s JOIN tickets t ON (s.ticket_code = t.ticket_code) ORDER BY s.ticket_code"
 		filas = conector.select(query)
 		for fila in filas:
 			stock.append(Stock(fila))
@@ -47,41 +48,31 @@ class Stock(MainClass):
 
 
 	@staticmethod
-	def findByTicket(ticket):
-		conector = conectorBase()
-		query = "SELECT s.*, t.ratio as ratio, t.name as name from " + Stock._table + " s JOIN tickets t ON (s.ticket = t.ticket) where s.ticket = %s"
-		fila = conector.selectOne(query, [ticket])
+	def find_by_ticket(ticket_code):
+		conector = ConectorBase()
+		query = "SELECT s.*, t.ratio as ratio, t.name as name from " + Stock._table + " s JOIN tickets t ON (s.ticket_code = t.ticket_code) where s.ticket_code = %s"
+		fila = conector.select_one(query, [ticket_code])
 		if fila:
 			return Stock(fila)
 		return None
 
 	@staticmethod
-	def ticketVerification(ticket):
-		conector = conectorBase()
-		query = "SELECT ratio, name FROM tickets WHERE ticket = %s"
-		ticketData = conector.selectOne(query, [ticket])
-		if ticketData:
-			return {}, ticketData
-		else:
-			return {"ERROR_ATTR_INCORRECTO" : [[ticket]]}, {"ratio" : None, "name" : None}
-
-	@staticmethod
 	def add(data):
-		errors, ticketData = Stock.ticketVerification(data["ticket"])
-		attrsData = {**data, **ticketData}
-		errors = Stock.preAddVerification(attrsData, errors)
+		errors, ticket_data = Ticket.check_ticket(data["ticket_code"], ["name", "ratio"])
+		attrs_data = {**data, **ticket_data}
+		errors = Stock.pre_check_add(attrs_data, errors)
 		if len(errors) == 0:
-			conector = conectorBase()
+			conector = ConectorBase()
 			values = [
-				attrsData["ticket"],
-				attrsData["ppc"],
-				attrsData["quantity"],
-				attrsData.get("weighted_date") or datetime.datetime.now().timestamp()
+				attrs_data["ticket_code"],
+				attrs_data["ppc"],
+				attrs_data["quantity"],
+				attrs_data.get("weighted_date") or datetime.datetime.now().timestamp()
 			]
-			query = "INSERT INTO " + Stock._table + " (ticket, ppc, quantity, weighted_date) VALUES (%s, %s, %s, %s)"
-			attrsData["id"] = conector.executeQuery(query, values)
+			query = "INSERT INTO " + Stock._table + " (ticket_code, ppc, quantity, weighted_date) VALUES (%s, %s, %s, %s)"
+			attrs_data["id"] = conector.execute_query(query, values)
 
-			return Stock(attrsData)
+			return Stock(attrs_data)
 		else:
-			msgsHandler.printErrors(errors)
+			msgsHandler.print_errors(errors)
 			return None

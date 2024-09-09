@@ -1,14 +1,14 @@
-from src.models.conector import conectorBase
+from src.models.conector import ConectorBase
 
 class Ticket:
 	_tabla = "tickets"
-	def __new__(cls, ticket, data = None):
-		if ticket is not None:
+	def __new__(cls, ticket_code, data = None):
+		if ticket_code is not None:
 			if not data:
-				data = Ticket.loadData(ticket)
+				data = Ticket.load_data(ticket_code)
 			if data:
 				instance = super(Ticket, cls).__new__(cls)
-				instance.ticket = data["ticket"]
+				instance.ticket_code = data["ticket_code"]
 				instance.name = data["name"]
 				instance.ratio = data["ratio"]
 				instance.date = data["date"]
@@ -19,24 +19,35 @@ class Ticket:
 			attrs = ', '.join(f'{attr}={getattr(self, attr)}' for attr in vars(self))
 			return self.__class__.__name__ + f'({attrs})'
 
-	def findAll():
-		conector = conectorBase()
+	def find_all():
+		conector = ConectorBase()
 		tickets = []
 		query = "SELECT * from " + Ticket._tabla
 		filas = conector.select(query)
 		for fila in filas:
-			tickets.append(Ticket(fila["ticket"], fila))
+			tickets.append(Ticket(fila["ticket_code"], fila))
 		return tickets
 
-	def findOne():
-		conector = conectorBase()
+	def find_one():
+		conector = ConectorBase()
 		query = "SELECT * from " + Ticket._tabla + " limit 1"
-		attrsExpected = conector.selectOne(query)
-		if attrsExpected:
-			return Ticket(attrsExpected["ticket"])
+		attrs_expected = conector.select_one(query)
+		if attrs_expected:
+			return Ticket(attrs_expected["ticket_code"])
 		return None
 
-	def loadData(ticket):
-		conector = conectorBase()
-		query = "SELECT * from " + Ticket._tabla + " WHERE ticket = %s"
-		return conector.selectOne(query, [ticket])
+	def load_data(ticket_code):
+		conector = ConectorBase()
+		query = "SELECT * from " + Ticket._tabla + " WHERE ticket_code = %s"
+		return conector.select_one(query, [ticket_code])
+
+
+	@staticmethod
+	def check_ticket(ticket_code, columns):
+		conector = ConectorBase()
+		query = "SELECT " + ','.join(columns) + " FROM " + Ticket._tabla + " WHERE ticket_code = %s"
+		ticket_data = conector.select_one(query, [ticket_code])
+		if ticket_data:
+			return {}, ticket_data
+		else:
+			return {"ERROR_ATTR_INCORRECTO" : [[ticket_code]]}, {key: None for key in columns}

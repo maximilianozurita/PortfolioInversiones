@@ -8,16 +8,16 @@ class msgsHandler:
 		with open(json_file) as file:
 			return json.load(file)
 
-	def getMessage(self, key, params = []):
+	def get_message(self, key, params = []):
 		if isinstance(params, list):
 			message = self.messages.get(key, "Unknown error")
-			countParamns = message.count('{}')
-			if len(params) == countParamns and len(params) != 0:
+			count_params = message.count('{}')
+			if len(params) == count_params and len(params) != 0:
 				message = message.format(*params) #Para reemplazar valores dinamicos
-			elif (len(params) > countParamns):
+			elif (len(params) > count_params):
 				print("Hay params de mas")
 				message = ''
-			elif (len(params) < countParamns):
+			elif (len(params) < count_params):
 				print("Falta params")
 				message = ''
 		else:
@@ -26,12 +26,12 @@ class msgsHandler:
 		return message
 
 	@staticmethod
-	def printErrors(errors):
+	def print_errors(errors):
 		#Ver posibilidad de en lugar de printear, de devolver array de msj
 		menssages = []
 		msgs = msgsHandler()
 		for key, values in errors.items():
 			for params in values:
-				menssages.append(msgs.getMessage(key, params))
-				print(msgs.getMessage(key, params))
+				menssages.append(msgs.get_message(key, params))
+				print(msgs.get_message(key, params))
 		return menssages

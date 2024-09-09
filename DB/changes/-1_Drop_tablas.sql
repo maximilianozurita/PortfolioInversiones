@@ -1,4 +1,4 @@
-DROP TABLE stats.stocks;
+DROP TABLE stats.equity;
 
 DROP TABLE stats.history;
 

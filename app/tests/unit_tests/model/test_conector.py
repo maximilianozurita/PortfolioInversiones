@@ -1,30 +1,30 @@
-from src.models.conector import conectorBase
-from tests.unitTests.Base import testBase, unittest
+from src.models.conector import ConectorBase
+from tests.unit_tests.base import testBase, unittest
 
-class testConector(testBase):
-	def testSelectOne(self):
+class TestConector(testBase):
+	def test_select_one(self):
 		expected = {
-			"ticket": "AAPL",
+			"ticket_code": "AAPL",
 			"name": "Apple",
 			"ratio": 10,
-			"date": 1725505084
+			"date": 1725763904
 		}
-		conector = conectorBase()
-		query = 'select * from tickets where ticket = %s'
-		select = conector.selectOne(query, ["AAPL"])
+		conector = ConectorBase()
+		query = 'select * from tickets where ticket_code = %s'
+		select = conector.select_one(query, ["AAPL"])
 		self.assertDictEqual(expected, select)
 		expected["ratio"] += 1
 		self.assertNotEqual(expected, select)
 
-	def testSelectAll(self):
+	def test_select_all(self):
 		expected = [{
-			"ticket": "AAPL",
+			"ticket_code": "AAPL",
 			"name": "Apple",
 			"ratio": 10,
-			"date": 1725505084
+			"date": 1725763904
 		}]
-		conector = conectorBase()
-		query = 'select * from tickets where ticket = %s'
+		conector = ConectorBase()
+		query = 'select * from tickets where ticket_code = %s'
 		select = conector.select(query, ["AAPL"])
 		self.assertListEqual(expected, select)
 		expected[0]["ratio"] +=1
