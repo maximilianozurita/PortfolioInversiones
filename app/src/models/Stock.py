@@ -13,15 +13,19 @@ class Stock(MainClass):
 		},
 		"ticket_code": {
 			"type": str,
+			"column" : True
 		},
 		"ppc": {
 			"type": float,
+			"column" : True
 		},
 		"quantity": {
 			"type": int,
+			"column" : True
 		},
 		"weighted_date": {
 			"type": int,
+			"column" : True
 		},
 		"name": {
 			"type": str
@@ -63,13 +67,8 @@ class Stock(MainClass):
 		errors = Stock.pre_check_add(attrs_data, errors)
 		if len(errors) == 0:
 			conector = ConectorBase()
-			values = [
-				attrs_data["ticket_code"],
-				attrs_data["ppc"],
-				attrs_data["quantity"],
-				attrs_data.get("weighted_date") or datetime.datetime.now().timestamp()
-			]
-			query = "INSERT INTO " + Stock._table + " (ticket_code, ppc, quantity, weighted_date) VALUES (%s, %s, %s, %s)"
+			columns, values = Stock.get_query_params(data)
+			query = "INSERT INTO " + Stock._table + " (" + ','.join(columns) + ") VALUES (" + ', '.join(['%s'] * len(columns)) + ")"
 			attrs_data["id"] = conector.execute_query(query, values)
 
 			return Stock(attrs_data)

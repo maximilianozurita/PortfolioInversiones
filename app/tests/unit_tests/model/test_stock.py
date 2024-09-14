@@ -1,9 +1,9 @@
 from src.models.stock import Stock
 from src.models.ticket import Ticket
-from tests.unit_tests.base import testBase, unittest
+from tests.unit_tests.base import TestBase, unittest
 import random
 
-class TestStock(testBase):
+class TestStock(TestBase):
 	def test_add_stock(self):
 		ticket_obj = Ticket("AAPL")
 		data = {
@@ -35,7 +35,6 @@ class TestStock(testBase):
 
 	def test_post_check_add(self):
 		data = {
-			"name" : 1,
 			"ratio": "cincuenta"
 		}
 		errors = Stock.post_check_add(data)

@@ -1,10 +1,12 @@
 import unittest
 from tests.unit_tests.factory_test.test_factory_stock import TestFactoryStock
+from tests.unit_tests.factory_test.test_factory_history import TestFactoryHistory
 from tests.unit_tests.helpers.test_msg_handler import TestMsgHandler
 from tests.unit_tests.model.test_stock import TestStock
 from tests.unit_tests.model.test_ticket import TestTicket
 from tests.unit_tests.model.test_conector import TestConector
 from tests.unit_tests.model.test_history import TestHistory
+
 
 modules = [
 	TestMsgHandler,
@@ -12,7 +14,8 @@ modules = [
 	TestStock,
 	TestTicket,
 	TestConector,
-	TestHistory
+	TestHistory,
+	TestFactoryHistory
 ]
 
 def suite():

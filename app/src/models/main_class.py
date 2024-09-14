@@ -6,9 +6,8 @@ class MainClass:
 		errors = self.post_check_add(data)
 		if len(errors) == 0:
 			for attr in self._attrs:
-				if attr in data:
-					value = data[attr]
-					setattr(self, attr, value)
+				value = data.get(attr, None)
+				setattr(self, attr, value)
 		else:
 			msgsHandler.print_errors(errors)
 			raise AttributeError("No se pudo crear objeto")
@@ -31,6 +30,24 @@ class MainClass:
 		del self
 
 #--------------------------------------------------------METODOS ESTATICOS--------------------------------------------------------------#
+	@classmethod
+	def get_attrs_keys(cls):
+		attrs_array = []
+		for attr in cls._attrs:
+			attrs_array.append(attr)
+		return attrs_array
+
+
+	@classmethod
+	def get_query_params(cls, data):
+		columns = []
+		values = []
+		for attr_key, attr_dict in cls._attrs.items():
+			if "column" in attr_dict:
+				columns.append(attr_key)
+				values.append(data.get(attr_key, None))
+		return columns, values
+
 
 	@classmethod
 	def pre_check_add(cls, data, errors = None):
@@ -49,9 +66,9 @@ class MainClass:
 			attrs = {key: value for key, value in class_attrs.items() if 'post_add' in value}
 		else:
 			attrs = {key: value for key, value in class_attrs.items() if 'post_add' not in value}
-		for key, attr_value in attrs.items():
-			attr_type = attr_value["type"]
-			can_be_null = "null" in attr_value
+		for key, attr_dict in attrs.items():
+			attr_type = attr_dict["type"]
+			can_be_null = "null" in attr_dict
 			if key in data:
 				value = data[key]
 				if not can_be_null and value is None:

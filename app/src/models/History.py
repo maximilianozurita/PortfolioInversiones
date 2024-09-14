@@ -8,59 +8,59 @@ class History(MainClass):
 	_table = "history"
 	_attrs = {
 		"id": {
-			"type": int,
-			"post_add": True,
+			"type" : int,
+			"post_add" : True,
 		},
 		"ticket_code": {
 			"type": str,
+			"column" : True
 		},
 		"ratio": {
 			"type": int,
-			"null" : True
+			"null" : True,
+			"column" : True
 		},
 		"transaction_key": {
 			"type": int,
-			"null" : True
+			"null" : True,
+			"column" : True
 		},
 		"broker_name": {
 			"type": str,
-			"null" : True
+			"null" : True,
+			"column" : True
 		},
 		"quantity": {
 			"type": int,
+			"column" : True
 		},
 		"unit_price": {
 			"type": float,
+			"column" : True
 		},
 		"usd_quote": {
 			"type": int,
+			"column" : True
 		},
 		"date": {
 			"type": int,
-			"null" : True
+			"null" : True,
+			"column" : True
 		},
 	}
 
 	def __init__(self, data):
 		super().__init__(data)
 
+	@staticmethod
 	def add(data):
 		errors, ticket_data = Ticket.check_ticket(data["ticket_code"], ["ratio"])
 		attrs_data = {**data, **ticket_data}
 		errors = History.pre_check_add(attrs_data, errors)
 		if len(errors) == 0:
 			conector = ConectorBase()
-			values = [
-				attrs_data["ticket_code"],
-				attrs_data["ratio"],
-				attrs_data["transaction_key"],
-				attrs_data["broker_name"],
-				attrs_data["quantity"],
-				round(attrs_data["unit_price"], 4),
-				attrs_data["usd_quote"],
-				attrs_data["date"] or datetime.datetime.now().timestamp(),
-			]
-			query = "INSERT INTO " + History._table + " (ticket_code, ratio, transaction_key, broker_name, quantity, unit_price, usd_quote, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+			columns, values = History.get_query_params(attrs_data)
+			query = "INSERT INTO " + History._table + " (" + ','.join(columns) + ") VALUES (" + ', '.join(['%s'] * len(columns)) + ")"
 			attrs_data["id"] = conector.execute_query(query, values)
 			return History(attrs_data)
 		else:

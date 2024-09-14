@@ -1,8 +1,8 @@
 from src.models.ticket import Ticket
 from src.models.conector import ConectorBase
-from tests.unit_tests.base import testBase, unittest
+from tests.unit_tests.base import TestBase, unittest
 
-class TestTicket(testBase):
+class TestTicket(TestBase):
 	def test_init_object(self):
 		cursor = ConectorBase()
 		attrs_expected = cursor.select_one("select * from tickets limit 1")

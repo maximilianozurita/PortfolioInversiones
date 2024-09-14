@@ -1,7 +1,9 @@
 from tests.factory.stock_factory import StockFactory
+from tests.factory.history_factory import HistoryFactory
 class FactoryRegister:
 	_class = {
-		"Stock": StockFactory
+		"Stock": StockFactory,
+		"History" : HistoryFactory
 	}
 	def __init__(self):
 		self.created_objects = []

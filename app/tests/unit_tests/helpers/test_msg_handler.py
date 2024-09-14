@@ -1,7 +1,7 @@
 from src.helpers.msgs_handler import msgsHandler
-from tests.unit_tests.base import testBase, unittest
+from tests.unit_tests.base import TestBase, unittest
 
-class TestMsgHandler(testBase):
+class TestMsgHandler(TestBase):
 	def test_msg_with_args(self):
 		msgs = msgsHandler()
 		key = "peso"
