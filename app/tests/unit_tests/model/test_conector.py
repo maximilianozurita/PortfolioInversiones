@@ -25,6 +25,7 @@ class TestConector(TestBase):
 		expected["unit_price"] += 1
 		self.assertNotEqual(expected, select)
 
+
 	def test_select_all(self):
 		ticket_obj = Ticket("AAPL")
 		expected = {
@@ -46,16 +47,34 @@ class TestConector(TestBase):
 		expected["ratio"] +=1
 		self.assertNotEqual([expected], select)
 
-	# def test_load_columns_attrs(self):
-	# 	conector = ConectorBase()
-	# 	conector.cursor.execute("delete from equity")
-	# 	conector.cursor.execute("select * from equity")
-	# 	conector.cursor.fetchall()
-	# 	conector.load_column_attr()
-	# 	print(conector.columnas_name)
-	# def test_load_columns_attrs_one_row(self):
-	# def test_load_columns_attrs_none_rows(self):
-	
+
+	def test_load_columns_attrs(self):
+		conector = ConectorBase()
+		conector.cursor.execute("select * from tickets")
+		conector.cursor.fetchall()
+		conector.load_column_attr()
+		#En este caso se sabe que existen estos attrs
+		attrs = ['ticket_code', 'name', 'ratio', 'date']
+		self.assertListEqual(attrs, conector.columnas_name)
+
+
+	def test_load_columns_attrs_one_row(self):
+		conector = ConectorBase()
+		conector.cursor.execute("select * from tickets")
+		conector.cursor.fetchone()
+		conector.load_column_attr()
+		attrs = ['ticket_code', 'name', 'ratio', 'date']
+		self.assertListEqual(attrs, conector.columnas_name)
+
+
+	def test_load_columns_attrs_none_rows(self):
+		conector = ConectorBase()
+		conector.cursor.execute("delete from equity")
+		conector.cursor.execute("select * from equity")
+		conector.cursor.fetchone()
+		conector.load_column_attr()
+		attrs = ['id', 'ticket_code', 'ppc', 'quantity', 'weighted_date']
+		self.assertListEqual(attrs, conector.columnas_name)
 
 
 if __name__ == '__main__':
