@@ -12,7 +12,8 @@ class TestStock(TestBase):
 			"quantity" : random.randint(1,10),
 			"weighted_date" : random.randint(1,1000)
 		}
-		stock = Stock.add(data)
+		(stock, errors) = Stock.add(data)
+		self.assertIsNone(errors)
 		self.assertIsInstance(stock, Stock)
 		self.factory.delete_on_cleanup(stock)
 		for val in data: 
@@ -78,7 +79,7 @@ class TestStock(TestBase):
 			"quantity" : random.randint(1,10),
 			"weighted_date" : random.randint(1,1000)
 		}
-		stock = Stock.add(data)
+		(stock, errors) = Stock.add(data)
 		self.assertIsNone(stock)
 
 

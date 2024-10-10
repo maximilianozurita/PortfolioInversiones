@@ -16,7 +16,8 @@ class TestHistory(TestBase):
 			"usd_quote" : random.randint(1,100),
 			"date" : random.randint(1,1000)
 		}
-		history = History.add(data)
+		(history, errors) = History.add(data)
+		self.assertIsNone(errors)
 		self.assertIsInstance(history, History)
 		self.factory.delete_on_cleanup(history)
 		for val in data: 
@@ -94,6 +95,14 @@ class TestHistory(TestBase):
 		history.delete()
 		obj = History.find_by_id(history_id)
 		self.assertIsNone(obj)
+
+
+	def test_delete_by_id(self):
+		history = self.factory.get_new("History")
+		History.delete_by_id(history.id)
+		history = History.find_by_id(history.id)
+		self.assertIsNone(history)
+
 
 if __name__ == '__main__':
 	unittest.main()

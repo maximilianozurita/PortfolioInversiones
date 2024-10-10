@@ -9,7 +9,7 @@ class MainClass:
 				value = data.get(attr, None)
 				setattr(self, attr, value)
 		else:
-			msgsHandler.print_errors(errors)
+			msgsHandler.get_message_masivo(errors)
 			raise AttributeError("No se pudo crear objeto")
 
 	#Define que attrs se consideran relevantes para saber si 2 objs son iguales 
@@ -20,14 +20,19 @@ class MainClass:
 
 	#Permite visualizar mejor el objeto y sus attr
 	def __repr__(self):
-			attrs = ', '.join(f'{attr}={getattr(self, attr)}' for attr in vars(self))
-			return self.__class__.__name__ + f'({attrs})'
+		attrs = self.get_attr_dict()
+		return self.__class__.__name__ + f'({attrs})'
 
 	def delete(self):
 		conector = ConectorBase()
 		query = "delete from " + self._table + " where id = %s"
-		conector.execute_query(query, [self.id])
+		r = conector.query_delete(query, [self.id])
 		del self
+		return r
+
+	def get_attr_dict(self):
+		attrs = ', '.join(f'{attr}={getattr(self, attr)}' for attr in vars(self))
+		return {attrs}
 
 #--------------------------------------------------------METODOS ESTATICOS--------------------------------------------------------------#
 	@classmethod

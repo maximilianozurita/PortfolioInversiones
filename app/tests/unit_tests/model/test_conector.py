@@ -1,6 +1,7 @@
 from src.models.conector import ConectorBase
 from tests.unit_tests.base import TestBase, unittest
 from src.models.ticket import Ticket
+from src.models.stock import Stock
 import random
 
 class TestConector(TestBase):
@@ -15,10 +16,10 @@ class TestConector(TestBase):
 			"usd_quote" : random.randint(1,100),
 			"date" : random.randint(1,1000)
 		}
-		self.factory.get_new("History", expected)
+		history = self.factory.get_new("History", expected)
 		conector = ConectorBase()
-		query = 'select * from history where ticket_code = %s'
-		select = conector.select_one(query, ["AAPL"])
+		query = 'select * from history where id = %s'
+		select = conector.select_one(query, [history.id])
 		expected["id"] = select["id"]
 		expected["ratio"] = ticket_obj.ratio
 		self.assertDictEqual(expected, select)
@@ -37,11 +38,11 @@ class TestConector(TestBase):
 			"usd_quote" : random.randint(1,100),
 			"date" : random.randint(1,1000)
 		}
-		self.factory.get_new("History", expected)
+		history = self.factory.get_new("History", expected)
 		conector = ConectorBase()
 		query = 'select * from history where ticket_code = %s'
 		select = conector.select(query, ["AAPL"])
-		expected["id"] = select[0]["id"]
+		expected["id"] = history.id
 		expected["ratio"] = ticket_obj.ratio
 		self.assertListEqual([expected], select)
 		expected["ratio"] +=1
@@ -69,8 +70,8 @@ class TestConector(TestBase):
 
 	def test_load_columns_attrs_none_rows(self):
 		conector = ConectorBase()
-		conector.cursor.execute("delete from equity")
-		conector.cursor.execute("select * from equity")
+		conector.cursor.execute("delete from " + Stock._table)
+		conector.cursor.execute("select * from " + Stock._table)
 		conector.cursor.fetchone()
 		conector.load_column_attr()
 		attrs = ['id', 'ticket_code', 'ppc', 'quantity', 'weighted_date']

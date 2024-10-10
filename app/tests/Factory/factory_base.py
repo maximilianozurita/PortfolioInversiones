@@ -1,5 +1,6 @@
 import random
 import string
+from src.helpers.msgs_handler import msgsHandler
 
 class FactoryBase:
 	def __init__(self, data):
@@ -9,7 +10,11 @@ class FactoryBase:
 		return data
 
 	def init_obj(self):
-		return self.pkg.add(self.attrs)
+		(obj, errors) = self.pkg.add(self.attrs)
+		if not errors:
+			return obj
+		else:
+			msgsHandler.print_masivo(errors)
 
 	def get_random_string(length=10):
 		characters = string.ascii_letters + string.digits

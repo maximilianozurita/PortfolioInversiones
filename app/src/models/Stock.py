@@ -2,10 +2,10 @@ from src.models.conector import ConectorBase
 from src.helpers.msgs_handler import msgsHandler
 from src.models.main_class import MainClass
 from src.models.ticket import Ticket
-import datetime
+from src.models.history import History
 
 class Stock(MainClass):
-	_table = "equity"
+	_table = "stock"
 	_attrs = {
 		"id": {
 			"type": int,
@@ -39,6 +39,41 @@ class Stock(MainClass):
 	def __init__(self, data):
 		super().__init__(data)
 
+	def update(self, data):
+		return 1
+
+
+	# hay stock y quantity es negativo y mayor a stock quantity -> Error
+	# hay stock y quiantity es negativo y menor a stock quantity -> updatear restando quantity
+	# hay stock y quantity es negativo e igual a stock quantity -> eliminar stock
+	def update_new_transaction(self, data):
+		stock = None
+		errors = {}
+		quantity = self.quantity + data["quantity"]
+		if quantity < 0:
+			errors.setdefault("ERROR_ACCIONES_INSUFICIENTES", []).append([self.quantity, data["quantity"]])
+		elif quantity == 0:
+			self.delete()
+		else:
+			stock, errors = self.update(data)
+			if len(errors) == 0:
+				#generar data para history
+				History.add(data)
+		return stock, errors
+		# if stock['quantity'] + data['quantity'] < 0:
+		# 	print('No hay suficientes acciones para eliminar')
+		# 	return {'error': 'no hay suficientes acciones para eliminar'}
+		# else:
+		# 	msg = ''
+		# 	if stock['quantity'] + data['quantity'] == 0:
+		# 		stockModel.delete_stock_holding(stock['ticket_code'])
+		# 		msg = {'message': 'eliminado'}
+		# 	else:
+		# 		new_stock_holding = stockHelper.get_new_stock_holding_data(stock, data)
+		# 		stockModel.set_stock_holding(new_stock_holding)
+		# 		msg = {'message': 'eliminado'}
+		# 	historyModel.set_transaction(data)
+		# 	return msg
 #--------------------------------------------------------METODOS ESTATICOS--------------------------------------------------------------#
 	@staticmethod
 	def find_all():
@@ -71,7 +106,7 @@ class Stock(MainClass):
 			query = "INSERT INTO " + Stock._table + " (" + ','.join(columns) + ") VALUES (" + ', '.join(['%s'] * len(columns)) + ")"
 			attrs_data["id"] = conector.execute_query(query, values)
 
-			return Stock(attrs_data)
+			return Stock(attrs_data), None
 		else:
-			msgsHandler.print_errors(errors)
-			return None
+			msgsHandler.get_message_masivo(errors)
+			return None, errors

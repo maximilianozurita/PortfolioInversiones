@@ -5,7 +5,7 @@ CREATE TABLE stats.tickets (
 	date BIGINT
 );
 
-CREATE TABLE stats.equity (
+CREATE TABLE stats.stock (
 	id INT AUTO_INCREMENT PRIMARY KEY UNIQUE not null,
 	ticket_code varchar(50) not null UNIQUE,
 	ppc FLOAT not null,

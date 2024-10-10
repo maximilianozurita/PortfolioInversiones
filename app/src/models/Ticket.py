@@ -30,7 +30,7 @@ class Ticket:
 
 	def find_one():
 		conector = ConectorBase()
-		query = "SELECT * from " + Ticket._tabla + " limit 1"
+		query = "SELECT t.* from " + Ticket._tabla + " t left join stock s on (t.ticket_code = s.ticket_code) where s.ticket_code is null limit 1"
 		attrs_expected = conector.select_one(query)
 		if attrs_expected:
 			return Ticket(attrs_expected["ticket_code"])

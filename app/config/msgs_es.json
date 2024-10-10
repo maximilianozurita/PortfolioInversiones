@@ -1,9 +1,19 @@
 {
-	"test_msj_sin_params" : "msj sin param",
+	"test_msj_sin_params" : "Msj sin param",
 	"test_msj1_params" : "Msj con 1 param {} de ejemplo",
 	"test_msj2_params" : "Msj con 2 param {} de ejemplo {}",
 	"ERROR_ATTR_NONE" : "El atributo {} no puede ser None.",
 	"ERROR_ATTR_TYPE" : "El atributo {} debe ser de tipo {}. Pero es {}",
 	"ERROR_ATTR_REQUERIDO" : "Falta el atributo requerido {}.",
-	"ERROR_ATTR_INCORRECTO" : "El atributo {} es incorrecto."
+	"ERROR_ATTR_INCORRECTO" : "El atributo {} es incorrecto.",
+	"ELEMENTO_ELIMINADO" : "Elemento '{}' eliminado con exito",
+	"ERROR_ELIMINAR" : "El elemento '{}' no se pudo eliminar",
+	"ELEMENTO_AGREGADO" : "Elemento '{}' agregado con exito",
+	"ELEMENTO_MODIFICADO" : "Elemento '{}' modificado con exito",
+	"ERROR_MODIFICAR" : "El elemento '{}' no se pudo modificar",
+	"ERROR_AGREGAR" : "Error al agregar elemento",
+	"NOT_FOUND" : "Elemento no encontrado",
+	"ERROR_ACCIONES_INSUFICIENTES" : "No hay suficientes acciones para eliminar, acciones actuales: {}, acciones a eliminar: {}.",
+	"STOCK_UPDATED" : "Se actualizo stock.",
+	"STOCK_ADDED" : "Se agrego stock"
 }

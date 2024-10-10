@@ -2,7 +2,6 @@ from src.models.conector import ConectorBase
 from src.helpers.msgs_handler import msgsHandler
 from src.models.main_class import MainClass
 from src.models.ticket import Ticket
-import datetime
 
 class History(MainClass):
 	_table = "history"
@@ -62,11 +61,12 @@ class History(MainClass):
 			columns, values = History.get_query_params(attrs_data)
 			query = "INSERT INTO " + History._table + " (" + ','.join(columns) + ") VALUES (" + ', '.join(['%s'] * len(columns)) + ")"
 			attrs_data["id"] = conector.execute_query(query, values)
-			return History(attrs_data)
+			return History(attrs_data), None
 		else:
-			msgsHandler.print_errors(errors)
-			return None
+			msgsHandler.print_masivo(errors)
+			return None, errors
 
+	@staticmethod
 	def find_by_id(id):
 		conector = ConectorBase()
 		query = "SELECT * from " + History._table + " where id = %s"
@@ -75,6 +75,7 @@ class History(MainClass):
 			return History(fila)
 		return None
 
+	@staticmethod
 	def find_all_by_ticket(ticket_code):
 		conector = ConectorBase()
 		history = []
@@ -83,3 +84,20 @@ class History(MainClass):
 		for fila in filas:
 			history.append(History(fila))
 		return history
+
+	@staticmethod
+	def find_all():
+		conector = ConectorBase()
+		history = []
+		query = "SELECT * from " + History._table
+		filas = conector.select(query)
+		for fila in filas:
+			history.append(History(fila))
+		return history
+
+
+	@staticmethod
+	def delete_by_id(id):
+		conector = ConectorBase()
+		query = "delete from " + History._table + " where id = %s"
+		return conector.query_delete(query, [id])

@@ -47,14 +47,16 @@ class TestMsgHandler(TestBase):
 		self.assertIsInstance(msg_parsed, str)
 		self.assertEqual(msg_parsed, "")
 
-	def test_print_multiple_errors(self):
-		#Ver posibilidad de en lugar de printear, de devolver array de msj
-		errors = {
+	def test_print_multiple_msg(self):
+		msgs_params = {
 			"test_msj_sin_params" : [[]],
 			"test_msj1_params": [["prueba"]],
 			"test_msj2_params": [["prueba", "prueba2"], ["prueb3", "prueba4"]]
 		}
-		msgsHandler.print_errors(errors)
+		msgs = msgsHandler.get_message_masivo(msgs_params)
+		for msg in msgs:
+			self.assertIsInstance(msg, str)
+			self.assertNotEqual(msg, "")
 
 if __name__ == '__main__':
 	unittest.main()

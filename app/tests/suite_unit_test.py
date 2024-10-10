@@ -6,7 +6,7 @@ from tests.unit_tests.model.test_stock import TestStock
 from tests.unit_tests.model.test_ticket import TestTicket
 from tests.unit_tests.model.test_conector import TestConector
 from tests.unit_tests.model.test_history import TestHistory
-
+from tests.unit_tests.controllers.test_stock_controller import TestStockController
 
 modules = [
 	TestMsgHandler,
@@ -15,7 +15,8 @@ modules = [
 	TestTicket,
 	TestConector,
 	TestHistory,
-	TestFactoryHistory
+	TestFactoryHistory,
+	TestStockController
 ]
 
 def suite():

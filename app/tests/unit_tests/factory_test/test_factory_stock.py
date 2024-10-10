@@ -12,7 +12,6 @@ class TestFactoryStock(TestBase):
 			"quantity" : random.randint(1,10),
 			"weighted_date" : random.randint(1,1000)
 		}
-
 		obj = self.factory.get_new("Stock", data)
 		self.assertIsInstance(obj, Stock)
 		for val in data:
