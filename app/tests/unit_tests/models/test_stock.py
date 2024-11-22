@@ -22,6 +22,14 @@ class TestStock(TestBase):
 		self.assert_objs_equals(objt, stock)
 
 
+	def test_update_stock(self):
+		stock = self.factory.get_new("Stock")
+		data = {
+			"ticket_code" : stock.ticket_code,
+			"quantity" : 100
+		}
+		Stock.update(data)
+
 	def test_pre_check_add(self):
 		ticket_obj = Ticket("AMD")
 		data = {

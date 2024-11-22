@@ -1,4 +1,4 @@
-from src.helpers.msgs_handler import msgsHandler
+from src.utils.msgs_handler import msgsHandler
 from src.models.conector import ConectorBase
 
 class MainClass:

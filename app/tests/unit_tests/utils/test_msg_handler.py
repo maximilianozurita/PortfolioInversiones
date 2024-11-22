@@ -1,4 +1,4 @@
-from src.helpers.msgs_handler import msgsHandler
+from src.utils.msgs_handler import msgsHandler
 from tests.unit_tests.base import TestBase, unittest
 
 class TestMsgHandler(TestBase):

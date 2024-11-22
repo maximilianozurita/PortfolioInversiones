@@ -1,22 +1,24 @@
 import unittest
 from tests.unit_tests.factory_test.test_factory_stock import TestFactoryStock
-from tests.unit_tests.factory_test.test_factory_history import TestFactoryHistory
-from tests.unit_tests.helpers.test_msg_handler import TestMsgHandler
-from tests.unit_tests.model.test_stock import TestStock
-from tests.unit_tests.model.test_ticket import TestTicket
-from tests.unit_tests.model.test_conector import TestConector
-from tests.unit_tests.model.test_history import TestHistory
-from tests.unit_tests.controllers.test_stock_controller import TestStockController
+from tests.unit_tests.factory_test.test_factory_transaction import TestFactoryTransaction
+from tests.unit_tests.utils.test_msg_handler import TestMsgHandler
+from tests.unit_tests.models.test_stock import TestStock
+from tests.unit_tests.models.test_ticket import TestTicket
+from tests.unit_tests.models.test_conector import TestConector
+from tests.unit_tests.models.test_transaction import TestTransaction
+from tests.unit_tests.resources.test_stock_resource import TestStockResource
+from tests.unit_tests.resources.test_transaction_resource import TestTransactionResource
 
 modules = [
 	TestMsgHandler,
 	TestFactoryStock,
+	TestFactoryTransaction,
+	TestStockResource,
+	TestTransactionResource,
 	TestStock,
 	TestTicket,
 	TestConector,
-	TestHistory,
-	TestFactoryHistory,
-	TestStockController
+	TestTransaction
 ]
 
 def suite():

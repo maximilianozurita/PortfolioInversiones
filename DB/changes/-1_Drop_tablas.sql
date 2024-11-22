@@ -1,5 +1,5 @@
 DROP TABLE stats.stock;
 
-DROP TABLE stats.history;
+DROP TABLE stats.transaction;
 
 DROP TABLE stats.tickets;

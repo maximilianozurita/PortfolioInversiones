@@ -16,10 +16,10 @@ class TestConector(TestBase):
 			"usd_quote" : random.randint(1,100),
 			"date" : random.randint(1,1000)
 		}
-		history = self.factory.get_new("History", expected)
+		transaction = self.factory.get_new("Transaction", expected)
 		conector = ConectorBase()
-		query = 'select * from history where id = %s'
-		select = conector.select_one(query, [history.id])
+		query = 'select * from transaction where id = %s'
+		select = conector.select_one(query, [transaction.id])
 		expected["id"] = select["id"]
 		expected["ratio"] = ticket_obj.ratio
 		self.assertDictEqual(expected, select)
@@ -38,11 +38,11 @@ class TestConector(TestBase):
 			"usd_quote" : random.randint(1,100),
 			"date" : random.randint(1,1000)
 		}
-		history = self.factory.get_new("History", expected)
+		transaction = self.factory.get_new("Transaction", expected)
 		conector = ConectorBase()
-		query = 'select * from history where ticket_code = %s'
+		query = 'select * from transaction where ticket_code = %s'
 		select = conector.select(query, ["AAPL"])
-		expected["id"] = history.id
+		expected["id"] = transaction.id
 		expected["ratio"] = ticket_obj.ratio
 		self.assertListEqual([expected], select)
 		expected["ratio"] +=1

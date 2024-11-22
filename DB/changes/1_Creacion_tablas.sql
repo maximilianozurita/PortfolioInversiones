@@ -14,7 +14,7 @@ CREATE TABLE stats.stock (
 	FOREIGN KEY (ticket_code) REFERENCES tickets(ticket_code)
 );
 
-CREATE TABLE stats.history (
+CREATE TABLE stats.transaction (
 	id INT AUTO_INCREMENT PRIMARY KEY UNIQUE,
 	ticket_code varchar(50) not null,
 	ratio INT,

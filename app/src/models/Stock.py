@@ -1,8 +1,8 @@
 from src.models.conector import ConectorBase
-from src.helpers.msgs_handler import msgsHandler
+from src.utils.msgs_handler import msgsHandler
 from src.models.main_class import MainClass
 from src.models.ticket import Ticket
-from src.models.history import History
+from src.models.transaction import Transaction
 
 class Stock(MainClass):
 	_table = "stock"
@@ -39,10 +39,8 @@ class Stock(MainClass):
 	def __init__(self, data):
 		super().__init__(data)
 
-	def update(self, data):
-		return 1
 
-
+	#CONSIDERACIONES QUE DEBE CONTEMPLAR:
 	# hay stock y quantity es negativo y mayor a stock quantity -> Error
 	# hay stock y quiantity es negativo y menor a stock quantity -> updatear restando quantity
 	# hay stock y quantity es negativo e igual a stock quantity -> eliminar stock
@@ -57,23 +55,11 @@ class Stock(MainClass):
 		else:
 			stock, errors = self.update(data)
 			if len(errors) == 0:
-				#generar data para history
-				History.add(data)
+				#generar data para transaction
+				Transaction.add(data)
 		return stock, errors
-		# if stock['quantity'] + data['quantity'] < 0:
-		# 	print('No hay suficientes acciones para eliminar')
-		# 	return {'error': 'no hay suficientes acciones para eliminar'}
-		# else:
-		# 	msg = ''
-		# 	if stock['quantity'] + data['quantity'] == 0:
-		# 		stockModel.delete_stock_holding(stock['ticket_code'])
-		# 		msg = {'message': 'eliminado'}
-		# 	else:
-		# 		new_stock_holding = stockHelper.get_new_stock_holding_data(stock, data)
-		# 		stockModel.set_stock_holding(new_stock_holding)
-		# 		msg = {'message': 'eliminado'}
-		# 	historyModel.set_transaction(data)
-		# 	return msg
+
+
 #--------------------------------------------------------METODOS ESTATICOS--------------------------------------------------------------#
 	@staticmethod
 	def find_all():
@@ -95,17 +81,37 @@ class Stock(MainClass):
 			return Stock(fila)
 		return None
 
+
 	@staticmethod
-	def add(data):
+	def verify(data):
 		errors, ticket_data = Ticket.check_ticket(data["ticket_code"], ["name", "ratio"])
 		attrs_data = {**data, **ticket_data}
 		errors = Stock.pre_check_add(attrs_data, errors)
+		return attrs_data, errors
+
+
+	@staticmethod
+	def add(data):
+		attrs_data, errors = Stock.verify(data)
 		if len(errors) == 0:
 			conector = ConectorBase()
 			columns, values = Stock.get_query_params(data)
 			query = "INSERT INTO " + Stock._table + " (" + ','.join(columns) + ") VALUES (" + ', '.join(['%s'] * len(columns)) + ")"
 			attrs_data["id"] = conector.execute_query(query, values)
+			return Stock(attrs_data), None
+		else:
+			msgsHandler.get_message_masivo(errors)
+			return None, errors
 
+
+	@staticmethod
+	def update(data):
+		attrs_data, errors = Stock.verify(data)
+		if len(errors) == 0:
+			conector = ConectorBase()
+			query = 'UPDATE ' + Stock._table + ' SET ppc = %s, quantity = %s, weighted_date = %s where ticket_code = %s'
+			values = [ data["ppc"], data["quantity"], data["weighted_date"], data["ticket_code"] ]
+			attrs_data["id"] = conector.execute_query(query, values)
 			return Stock(attrs_data), None
 		else:
 			msgsHandler.get_message_masivo(errors)

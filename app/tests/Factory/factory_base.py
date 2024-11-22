@@ -1,6 +1,6 @@
 import random
 import string
-from src.helpers.msgs_handler import msgsHandler
+from src.utils.msgs_handler import msgsHandler
 
 class FactoryBase:
 	def __init__(self, data):

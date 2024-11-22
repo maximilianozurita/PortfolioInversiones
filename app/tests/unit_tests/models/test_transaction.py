@@ -1,11 +1,11 @@
-from src.models.history import History
+from src.models.transaction import Transaction
 from src.models.ticket import Ticket
-from src.helpers.msgs_handler import msgsHandler
+from src.utils.msgs_handler import msgsHandler
 from tests.unit_tests.base import TestBase, unittest
 import random
 
-class TestHistory(TestBase):
-	def test_add_history(self):
+class TestTransaction(TestBase):
+	def test_add_transaction(self):
 		ticket_obj = Ticket("AAPL")
 		data = {
 			"ticket_code" : ticket_obj.ticket_code,
@@ -16,14 +16,14 @@ class TestHistory(TestBase):
 			"usd_quote" : random.randint(1,100),
 			"date" : random.randint(1,1000)
 		}
-		(history, errors) = History.add(data)
+		(transaction, errors) = Transaction.add(data)
 		self.assertIsNone(errors)
-		self.assertIsInstance(history, History)
-		self.factory.delete_on_cleanup(history)
+		self.assertIsInstance(transaction, Transaction)
+		self.factory.delete_on_cleanup(transaction)
 		for val in data: 
-			self.assertEqual(data[val], getattr(history, val))
-		objts = History.find_all_by_ticket(data["ticket_code"])
-		self.assertIn(history,objts)
+			self.assertEqual(data[val], getattr(transaction, val))
+		objts = Transaction.find_all_by_ticket(data["ticket_code"])
+		self.assertIn(transaction,objts)
 
 
 	def test_error_pre_check_add(self):
@@ -40,7 +40,7 @@ class TestHistory(TestBase):
 			'ERROR_ATTR_TYPE': [['ratio', 'int', 'str'], ['transaction_key', 'int', 'str'], ['broker_name', 'str', 'float'], ['quantity', 'int', 'str'], ['date', 'int', 'str']], 
 			'ERROR_ATTR_NONE': [['unit_price'], ['usd_quote']]
 		}
-		self.generic_test_check_add(History, data, False , error_expected)
+		self.generic_test_check_add(Transaction, data, False , error_expected)
 
 
 	def test_error_post_check_add(self):
@@ -49,12 +49,12 @@ class TestHistory(TestBase):
 			"ratio": "cincuenta"
 		}
 		error_expected = {'ERROR_ATTR_NONE': [['id']]}
-		self.generic_test_check_add(History, data, True , error_expected)
+		self.generic_test_check_add(Transaction, data, True , error_expected)
 
 
 	def test_post_check_add_ok(self):
 		data = {"id" : random.randint(1,100)}
-		self.generic_test_check_add(History, data, True)
+		self.generic_test_check_add(Transaction, data, True)
 
 
 	def test_pre_check_add_ok(self):
@@ -68,13 +68,13 @@ class TestHistory(TestBase):
 			"usd_quote" : random.randint(1,100),
 			"date" : random.randint(1,1000)
 		}
-		self.generic_test_check_add(History, data, False)
+		self.generic_test_check_add(Transaction, data, False)
 
 
 	def test_find_by_id(self):
-		obj_expected = self.factory.get_new("History")
-		obj = History.find_by_id(obj_expected.id)
-		self.assertIsInstance(obj, History)
+		obj_expected = self.factory.get_new("Transaction")
+		obj = Transaction.find_by_id(obj_expected.id)
+		self.assertIsInstance(obj, Transaction)
 		self.assert_objs_equals(obj_expected, obj)
 
 
@@ -82,26 +82,26 @@ class TestHistory(TestBase):
 		objs_expected = []
 		ticket_code = Ticket("AMD").ticket_code
 		for i in range(3):
-			objs_expected.append(self.factory.get_new("History", {"ticket_code" :  ticket_code}))
-		objs_finded = History.find_all_by_ticket(ticket_code)
+			objs_expected.append(self.factory.get_new("Transaction", {"ticket_code" :  ticket_code}))
+		objs_finded = Transaction.find_all_by_ticket(ticket_code)
 		for i, obj in enumerate(objs_finded):
-			self.assertIsInstance(obj, History)
+			self.assertIsInstance(obj, Transaction)
 			self.assert_objs_equals(objs_expected[i], obj)
 
 
 	def test_delete(self):
-		history = self.factory.get_new("History")
-		history_id = history.id
-		history.delete()
-		obj = History.find_by_id(history_id)
+		transaction = self.factory.get_new("Transaction")
+		transaction_id = transaction.id
+		transaction.delete()
+		obj = Transaction.find_by_id(transaction_id)
 		self.assertIsNone(obj)
 
 
 	def test_delete_by_id(self):
-		history = self.factory.get_new("History")
-		History.delete_by_id(history.id)
-		history = History.find_by_id(history.id)
-		self.assertIsNone(history)
+		transaction = self.factory.get_new("Transaction")
+		Transaction.delete_by_id(transaction.id)
+		transaction = Transaction.find_by_id(transaction.id)
+		self.assertIsNone(transaction)
 
 
 if __name__ == '__main__':

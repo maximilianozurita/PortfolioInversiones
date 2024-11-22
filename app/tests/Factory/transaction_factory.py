@@ -1,13 +1,13 @@
-from src.models.history import History
+from src.models.transaction import Transaction
 from tests.factory.factory_base import FactoryBase
 from src.models.ticket import Ticket
 from datetime import datetime
 import random
 
-class HistoryFactory(FactoryBase):
+class TransactionFactory(FactoryBase):
 	def __init__(self, data):
 		super().__init__(data)
-		self.pkg = History
+		self.pkg = Transaction
 
 	def attr_parser(self, data):
 		data["ticket_code"] = data.get("ticket_code") or Ticket.find_one().ticket_code
