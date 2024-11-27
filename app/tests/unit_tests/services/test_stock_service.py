@@ -1,22 +1,20 @@
 import src.services.stock_service as stock_service
 from tests.unit_tests.base import TestBase, unittest
 from src.utils.msgs_handler import msgsHandler
-import random
 msgs = msgsHandler()
 
-class TestStockResource(TestBase):
+class TestStockService(TestBase):
 	def test_get_stock_holding(self):
-		code_expected = 200
 		response_expected = {
-			'status': 'Ok', 
-			'message': '',
+			'ok': True, 
 			'data': []
 		}
 		for i in range(5):
 			stock = self.factory.get_new("Stock")
 			response_expected["data"].append(stock.get_attr_dict())
-		response, code = stock_service.get_stock_holding()
-		self.assertEqual(code_expected, code)
+		response = stock_service.get_stock_holding()
+		print(response)
+		print(response_expected)
 		self.assertDictEqual(response_expected, response)
 
 

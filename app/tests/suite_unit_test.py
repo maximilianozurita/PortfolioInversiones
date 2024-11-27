@@ -6,15 +6,19 @@ from tests.unit_tests.models.test_stock import TestStock
 from tests.unit_tests.models.test_ticket import TestTicket
 from tests.unit_tests.models.test_conector import TestConector
 from tests.unit_tests.models.test_transaction import TestTransaction
-from tests.unit_tests.resources.test_stock_resource import TestStockResource
-from tests.unit_tests.resources.test_transaction_resource import TestTransactionResource
+from tests.unit_tests.services.test_stock_service import TestStockService
+from tests.unit_tests.services.test_transaction_service import TestTransactionService
+# from tests.unit_tests.routes.test_stock_route import TestStockService
+# from tests.unit_tests.routes.test_transaction_route import TestTransactionResource
 
 modules = [
 	TestMsgHandler,
 	TestFactoryStock,
 	TestFactoryTransaction,
-	TestStockResource,
-	TestTransactionResource,
+	TestStockService,
+	TestTransactionService,
+	# TestStockResource,
+	# TestTransactionResource,
 	TestStock,
 	TestTicket,
 	TestConector,
