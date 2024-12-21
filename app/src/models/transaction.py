@@ -52,10 +52,15 @@ class Transaction(MainClass):
 		super().__init__(data)
 
 	@staticmethod
-	def add(data):
+	def verify(data):
 		errors, ticket_data = Ticket.check_ticket(data["ticket_code"], ["ratio"])
 		attrs_data = {**data, **ticket_data}
 		errors = Transaction.pre_check_add(attrs_data, errors)
+		return attrs_data, errors
+
+	@staticmethod
+	def add(data):
+		attrs_data, errors = Transaction.verify(data)
 		if len(errors) == 0:
 			conector = ConectorBase()
 			columns, values = Transaction.get_query_params(attrs_data)

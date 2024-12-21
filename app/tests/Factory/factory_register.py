@@ -16,5 +16,11 @@ class FactoryRegister:
 			self.delete_on_cleanup(obj_created)
 			return obj_created
 
+	def get_data_for(self, class_name, data = None):
+		if data is None: data = {}
+		if class_name in FactoryRegister._class:
+			obj_factory = FactoryRegister._class[class_name](data)
+			return obj_factory.attrs
+
 	def delete_on_cleanup(self, obj_created):
-		self.created_objects.append(obj_created)
+		if obj_created: self.created_objects.append(obj_created)

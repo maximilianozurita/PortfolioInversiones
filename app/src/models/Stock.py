@@ -39,27 +39,6 @@ class Stock(MainClass):
 	def __init__(self, data):
 		super().__init__(data)
 
-
-	#CONSIDERACIONES QUE DEBE CONTEMPLAR:
-	# hay stock y quantity es negativo y mayor a stock quantity -> Error
-	# hay stock y quiantity es negativo y menor a stock quantity -> updatear restando quantity
-	# hay stock y quantity es negativo e igual a stock quantity -> eliminar stock
-	def update_new_transaction(self, data):
-		stock = None
-		errors = {}
-		quantity = self.quantity + data["quantity"]
-		if quantity < 0:
-			errors.setdefault("ERROR_ACCIONES_INSUFICIENTES", []).append([self.quantity, data["quantity"]])
-		elif quantity == 0:
-			self.delete()
-		else:
-			stock, errors = self.update(data)
-			if len(errors) == 0:
-				#generar data para transaction
-				Transaction.add(data)
-		return stock, errors
-
-
 #--------------------------------------------------------METODOS ESTATICOS--------------------------------------------------------------#
 	@staticmethod
 	def find_all():
@@ -109,10 +88,11 @@ class Stock(MainClass):
 		attrs_data, errors = Stock.verify(data)
 		if len(errors) == 0:
 			conector = ConectorBase()
-			query = 'UPDATE ' + Stock._table + ' SET ppc = %s, quantity = %s, weighted_date = %s where ticket_code = %s'
+			query = 'UPDATE ' + Stock._table + ' (' + ','.join(data) + ') VALUES (' + ','.join(['%s'] * len(data)) + ')'
 			values = [ data["ppc"], data["quantity"], data["weighted_date"], data["ticket_code"] ]
 			attrs_data["id"] = conector.execute_query(query, values)
 			return Stock(attrs_data), None
 		else:
 			msgsHandler.get_message_masivo(errors)
 			return None, errors
+

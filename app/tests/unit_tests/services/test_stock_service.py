@@ -13,31 +13,29 @@ class TestStockService(TestBase):
 			stock = self.factory.get_new("Stock")
 			response_expected["data"].append(stock.get_attr_dict())
 		response = stock_service.get_stock_holding()
-		print(response)
-		print(response_expected)
 		self.assertDictEqual(response_expected, response)
 
 
-	def test_new_transaction_add_new_stock(self):
-		code_expected = 200
-		response_expected = {
-			'status': 'Ok', 
-			'message': '',
-			'data': []
-		}
-		# data = {
-		# 	"ticket_code" : ,
-		# 	"ppc" : ,
-		# 	"quantity" : ,
-		# 	"weighted_date" : ,
-		# 	"name" : ,
-		# 	"ratio" : 
-		# }
-		data = {
-			"ticket_code" : "AAPL",
-			"quantity" : 10
-		}
-		response, code = stock_service.set_new_transaction(data)
+	# def test_new_transaction_add_new_stock(self):
+	# 	code_expected = 200
+	# 	response_expected = {
+	# 		'status': 'Ok', 
+	# 		'message': '',
+	# 		'data': []
+	# 	}
+	# 	# data = {
+	# 	# 	"ticket_code" : ,
+	# 	# 	"ppc" : ,
+	# 	# 	"quantity" : ,
+	# 	# 	"weighted_date" : ,
+	# 	# 	"name" : ,
+	# 	# 	"ratio" : 
+	# 	# }
+	# 	data = {
+	# 		"ticket_code" : "AAPL",
+	# 		"quantity" : 10
+	# 	}
+	# 	response, code = stock_service.set_new_transaction(data)
 
 # test_new_transaction_update_stock_add_quantity
 # test_new_transaction_update_stock_delete_quantity

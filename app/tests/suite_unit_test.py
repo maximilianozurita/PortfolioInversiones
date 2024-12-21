@@ -8,8 +8,8 @@ from tests.unit_tests.models.test_conector import TestConector
 from tests.unit_tests.models.test_transaction import TestTransaction
 from tests.unit_tests.services.test_stock_service import TestStockService
 from tests.unit_tests.services.test_transaction_service import TestTransactionService
-# from tests.unit_tests.routes.test_stock_route import TestStockService
-# from tests.unit_tests.routes.test_transaction_route import TestTransactionResource
+# from tests.unit_tests.routes.test_stock_route import TestStockRoute
+# from tests.unit_tests.routes.test_transaction_route import TestTransactionRoute
 
 modules = [
 	TestMsgHandler,
@@ -17,8 +17,8 @@ modules = [
 	TestFactoryTransaction,
 	TestStockService,
 	TestTransactionService,
-	# TestStockResource,
-	# TestTransactionResource,
+	# TestStockRoute,
+	# TestTransactionRoute,
 	TestStock,
 	TestTicket,
 	TestConector,
