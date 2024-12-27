@@ -23,6 +23,6 @@ CREATE TABLE stats.transaction (
 	quantity INT not null,
 	unit_price FLOAT not null,
 	usd_quote INT not null,
-	date BIGINT,
+	date BIGINT not null,
 	FOREIGN KEY (ticket_code) REFERENCES tickets(ticket_code)
 );

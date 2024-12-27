@@ -31,8 +31,12 @@ class MainClass:
 		return r
 
 	def get_attr_dict(self):
-		attrs = ', '.join(f'{attr}={getattr(self, attr)}' for attr in vars(self))
-		return {attrs}
+		attrs = {}
+		for key in self._attrs:
+			value = getattr(self, key)
+			attrs[key] = value
+		return attrs
+
 
 #--------------------------------------------------------METODOS ESTATICOS--------------------------------------------------------------#
 	@classmethod
@@ -82,4 +86,18 @@ class MainClass:
 					errors.setdefault("ERROR_ATTR_TYPE", []).append([key, attr_type.__name__, type(value).__name__])
 			elif not can_be_null:
 				errors.setdefault("ERROR_ATTR_NONE", []).append([key])
+		return errors
+
+	@classmethod
+	def check_update(cls, data):
+		errors = {}
+		class_attrs = cls._attrs
+		for key in data:
+			if key not in class_attrs:
+				errors.setdefault("ERROR_ATTR_INCORRECTO", []).append([key])
+			else:
+				attr_dict = class_attrs[key]
+				attr_type = attr_dict["type"]
+				if not isinstance(data[key], attr_type):
+					errors.setdefault("ERROR_ATTR_TYPE", []).append([key, attr_type.__name__, type(data[key]).__name__])
 		return errors

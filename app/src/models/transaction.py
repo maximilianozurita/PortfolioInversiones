@@ -43,7 +43,6 @@ class Transaction(MainClass):
 		},
 		"date": {
 			"type": int,
-			"null" : True,
 			"column" : True
 		},
 	}

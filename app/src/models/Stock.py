@@ -68,6 +68,11 @@ class Stock(MainClass):
 		errors = Stock.pre_check_add(attrs_data, errors)
 		return attrs_data, errors
 
+	def verify_update(self, data):
+		ticket_data = {"ticket_code": self.ticket_code, "name": self.name, "ratio": self.ratio}
+		attrs_data = {**data, **ticket_data}
+		errors = Stock.check_update(attrs_data)
+		return attrs_data, errors
 
 	@staticmethod
 	def add(data):
@@ -83,14 +88,16 @@ class Stock(MainClass):
 			return None, errors
 
 
-	@staticmethod
-	def update(data):
-		attrs_data, errors = Stock.verify(data)
+	def update(self, data):
+		attrs_data, errors = self.verify_update(data)
 		if len(errors) == 0:
 			conector = ConectorBase()
-			query = 'UPDATE ' + Stock._table + ' (' + ','.join(data) + ') VALUES (' + ','.join(['%s'] * len(data)) + ')'
-			values = [ data["ppc"], data["quantity"], data["weighted_date"], data["ticket_code"] ]
-			attrs_data["id"] = conector.execute_query(query, values)
+			columns, values = Stock.get_query_params(attrs_data)
+			set_clause = ', '.join([f'{column} = %s' for column in columns])
+			query = f'UPDATE {Stock._table} SET {set_clause} WHERE id = %s'
+			values.append(self.id)
+			conector.execute_query(query, values)
+			attrs_data["id"] = self.id
 			return Stock(attrs_data), None
 		else:
 			msgsHandler.get_message_masivo(errors)
