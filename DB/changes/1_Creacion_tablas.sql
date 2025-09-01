@@ -26,3 +26,11 @@ CREATE TABLE stats.transaction (
 	date BIGINT not null,
 	FOREIGN KEY (ticket_code) REFERENCES tickets(ticket_code)
 );
+
+CREATE TABLE stats.tokens (
+	id INT PRIMARY KEY UNIQUE,
+	access_token TEXT not null,
+	refresh_token TEXT not null,
+	token_expires BIGINT not null,
+	refresh_expires BIGINT not null
+);
